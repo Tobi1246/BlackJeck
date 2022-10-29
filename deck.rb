@@ -1,6 +1,6 @@
 class Deck
   attr_accessor :stack_deck
-    
+ #клас колоды , здесь мы возданные карты помещаем в нашу колоду   
   def initialize
     @rank = [*(2..10), 'J', 'Q', 'K', 'A']
     @suit = %i[♥ ♣ ♦ ♠]
@@ -24,4 +24,5 @@ class Deck
   def deal(num, player)
     num.times {@stack_deck.shift.generate_card(player)}
   end
+  #что бы не грамаздить код создали метод выдающий карты игроку и надему Дилеру
 end
