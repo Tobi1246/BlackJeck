@@ -1,6 +1,6 @@
 class Interface
   attr_reader :stack_deck, :player, :player2, :total
-
+# интерфейс и логика игры 
   def initialize 
     puts "Добро пожаловать на игру BlackJeck"
     print "Введите ваше имя:"
@@ -9,7 +9,7 @@ class Interface
     @player2 = Player.new('Дилер')
     @stack_deck = Deck.new
   end
-
+# просим ввести имя игрока и начинаем нашу игру
   def game_menu
     loop do 
        main_menu = [
@@ -25,7 +25,8 @@ class Interface
       end
     end    
   end
-
+# меню для игрока с уловиями победы и поражения , 
+# а так же возможность выйти и не продолжать игру
   def show_card_user(player)
     print "В вашей руке #{player.name}"
     player.card_in_hand.each do |card, index|
@@ -45,7 +46,8 @@ class Interface
     puts "Ваш баланс составляет #{@player.bank}$\tБаланс Дилера: #{@player2.bank}$"
     choice 
   end
-
+# начало игры , инстантно добавляем карты игроку и дилеру 
+# делаем ставки в размере 10 баксов и вызываем меню выборов(choice)  
   def choice
     loop do 
       if win_game
@@ -80,12 +82,12 @@ class Interface
       end
     end    
   end
-
+# здесь мы предлогаем игроку варианты событий  
   def bet
     @player.bank -=10
     @player2.bank -=10
   end
-
+# стартовые ставки 
   def results
     show_card_user(@player)
     puts @player.total
@@ -110,7 +112,7 @@ class Interface
     end
     delete_date
   end
-
+# подсчёт результатов с приоритетом для организации(если игрок набрал выше 21 автоматически проиграл) 
   def lose
     if @player.total > 21 
       show_card_user(@player2)
@@ -121,11 +123,11 @@ class Interface
       results
     end
   end
-
+#условия при которыз игрок проиграл , если не проиграл то вызываем подсчёт очков игроков
   def bot_value   
     @stack_deck.deal(1,@player2) if @player2.total < 17 && @player2.card_in_hand.size == 2
   end
-
+# берём карту на нашем Диллере по условию
   def delete_date
     @player.card_in_hand.clear
     @player.total = 0
@@ -134,11 +136,12 @@ class Interface
     @stack_deck = []
     @stack_deck = Deck.new
   end
-
+# что бы не награмождать данными просто удаляем карты из руки и колоды
+# и создаём уникальную колоду   
   def max_card
    results if @player.card_in_hand.size == 3 && @player2.card_in_hand.size == 3 
   end
-
+# лимит на владения картами в руке одного игрока
   def win_game
     if @player2.bank == 0
       puts "У Дилера не осталось денег!!!"
@@ -146,6 +149,7 @@ class Interface
     elsif @player.bank == 0
       puts "У Вас не осталось денег!!!"
       puts "Вы потерпели ПОРАЖЕНИЕ!!!"  
-    end    
+    end
+# уловия победы/поражения в игре    
   end
 end
