@@ -16,15 +16,16 @@ class Interface
   # просим ввести имя игрока и начинаем нашу игру
   def game_menu
     loop do
+      break win_game if @player.bank.zero? || @player2.bank.zero?
       main_menu = [
-        '1. Начать игру',
+        '1 Начать игру',
         '0 - выход из меню'
       ]
       main_menu.each { |item| puts item }
       case gets.chomp.to_i
       when 1
         game
-      else
+      when 0
         break
       end
     end
@@ -56,8 +57,6 @@ class Interface
   # делаем ставки в размере 10 баксов и вызываем меню выборов(choice)
   def choice
     loop do
-      break if win_game
-
       if max_card
         puts 'Ко-во карт обоих игроков достигло 3'
         break
@@ -101,15 +100,15 @@ class Interface
     show_card_user(@player2)
     puts @player2.total
     if @player2.total > Card::MAX_POINTS
-      @player.bank += Plaer::WIN_BET
+      @player.bank += Player::WIN_BET
       puts "Вы выиграли!!! вы получаете 10$ ваш текущий баланс:#{@player.bank}$"
       puts "На счету у Дилерра осталось:#{@player2.bank}$"
     elsif @player.total > @player2.total
-      @player.bank += Plaer::WIN_BET
+      @player.bank += Player::WIN_BET
       puts "Вы выиграли!!! вы получаете 10$ ваш текущий баланс:#{@player.bank}$"
       puts "На счету у Дилерра осталось:#{@player2.bank}$"
     elsif @player2.total > @player.total
-      @player2.bank += Plaer::WIN_BET
+      @player2.bank += Player::WIN_BET
       puts "Вы проиграли =(  10$ ваш текущий баланс:#{@player.bank}$"
       puts "На счету у Дилерра осталось:#{@player2.bank}$"
     else
@@ -127,6 +126,7 @@ class Interface
       show_card_user(@player2)
       puts @player2.total
       puts "Вы проиграли =(  10$ ваш текущий баланс:#{@player.bank}$"
+      @player2.bank += Player::WIN_BET
       delete_date
     else
       results
